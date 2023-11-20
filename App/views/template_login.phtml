@@ -1,0 +1,39 @@
+<?php $title = "Login Page"; ?>
+
+<div class="container mt-5">
+    <?php if (!empty($data['successMessage'])) : ?>
+        <div class="alert alert-success" role="alert">
+            <?php echo $data['successMessage']; ?>
+        </div>
+        <script>
+            setTimeout(function() {
+                document.querySelector('.alert-success').style.display = 'none';
+                window.location.href = "?page=user&action=index";
+
+            }, 1000);
+        </script>
+    <?php endif; ?>
+
+    <?php if (!empty($data['errorMessage'])) : ?>
+        <div class="alert alert-danger" role="alert">
+            <?php echo $data['errorMessage']; ?>
+        </div>
+        <script>
+            setTimeout(function() {
+                document.querySelector('.alert-danger').style.display = 'none';
+            }, 3000);
+        </script>
+    <?php endif; ?>
+
+
+    <h1 class="text-center">Login</h1>
+    <form method="POST">
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" required class="form-control" id="email" name="email" placeholder="Your email">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" required class="form-control" id="password" name="password" placeholder="Your password">
+            <button class="mt-4 btn btn-primary" type="submit" id="send" name="submit">Send</button>
+        </div>
+    </form>
+</div>

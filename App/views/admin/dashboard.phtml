@@ -1,0 +1,57 @@
+<?php $title = 'Admin Panel'?>
+
+<?php 
+
+
+$articles =$data['article'];
+$users =$data['user'];
+$byID= $data['byId'];
+?>
+
+<h1 class="text-center">Admin List</h1>
+<pre>
+  <h2>by id</h2>
+  <?php var_dump($byID)?>
+<h2>users</h2>
+  <?php var_dump($users)?>
+  <hr>
+  <h2>article</h2>
+  <?php var_dump($articles)?>
+</pre>
+<a href="?page=articles&action=add" class="btn btn-primary m-1">Add Picture</a>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Source</th>
+      <th scope="col">Title</th>
+      <th scope="col">Content</th>
+      <th scope="col">Author</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+  <?php foreach ($articles as $article) : ?>
+    <tr>
+      <th scope="row"><?= $article['id'] ?></th>
+      <td><img width="80" src="<?= $article['image_path'] ?>" alt="<?= $article['title'] ?>"></td>
+      <td><?= $article['title'] ?></td>
+      <td><?= $article['content'] ?></td>
+      <td><?= $article['username'] ?></td>
+      <td>
+        <a href="?page=admin&action=updateArticle&id=<?= $article['id'] ?>" class="btn btn-success m-1">Update</a>
+        <a href="?page=admin&action=deleteArticle&id=<?= $article['id'] ?>" class="btn btn-danger m-1">Delete</a>
+        <a href="javascript:deleteArticle(<?= $article['id'] ?>)" class="btn btn-warning m-1">Delete? (confirmJS)</a>
+      </td>
+    </tr>
+  <?php endforeach ?>
+  </tbody>
+  </table>
+  <script>
+    function deleteArticle(id){
+      const question = window.confirm("Are you sure you want to delete "+id+" ?");
+      if (question){
+        location.href="?page=admin_deleteArticle&id="+id;
+      }
+    }
+  </script>
