@@ -14,8 +14,8 @@ class UserController extends Controller
         // si l'utilisateur est connecté 
         if (isset($_SESSION['user'])) {
             $userId = $_SESSION['user']['id'];
-            
-            $data['user'] = $userManager->getUserById($userId);
+
+            $data['user'] = $userManager->getById($userId);
 
             if ($data['user']) {
                 $this->render(__DIR__ . '/../views/template_profile.phtml', $data);
@@ -37,21 +37,19 @@ class UserController extends Controller
 
             if (!empty($mail) && !empty($password)) {
                 $userManager = new UserManager();
-                $user = $userManager->getUserByMail($mail);
-                
+                $user = $userManager->getUserByEmail($mail);
 
-                            if ($user) {
-                                $hashedPasswordFromDatabase = $user['password'];
-                                if (password_verify($password, $hashedPasswordFromDatabase)) {
-                                    $successMessage = 'Connexion réussie !';
-                                    $data['successMessage'] = $successMessage;
-                                    $_SESSION['user'] = $user;
-                                    $_SESSION['user']['id'] = $user['id'];
 
-                                    header('Location: index.php?page=user&action=index');
-                                }
+                if ($user) {
+                    $hashedPasswordFromDatabase = $user['password'];
+                    if (password_verify($password, $hashedPasswordFromDatabase)) {
+                        $successMessage = 'Connexion réussie !';
+                        $data['successMessage'] = $successMessage;
+                        $_SESSION['user'] = $user;
+                        $_SESSION['user']['id'] = $user['id'];
 
-                
+                        header('Location: index.php?page=user&action=index');
+                    }
                 } else {
                     $errorMessage = 'Aucun utilisateur trouvé avec cette adresse e-mail.';
                 }
@@ -64,35 +62,26 @@ class UserController extends Controller
 
     public function register()
     {
-        // On instancie la class User pour créer un nouvel utilisateur
-        $user = new User();
-        // On anticipe d'éventuelles erreurs en créant un tableau
-        $errors = [];
         if (isset($_POST['submit'])) {
-            // Si le formulaire est validé on "hydrate" notre objet
-            // avec les informations du formulaire
-            $user->setUserName($_POST['username']);
+            $roles = isset($_POST['roles']) ? explode(",", $_POST['roles']) : [];
+            $strRoles = json_encode($roles);
+
+            $user = new User();
+            $user->setUserName($_POST['name']);
             $user->setEmail($_POST['email']);
-            $user->setPassword($_POST['password']);
-            // Si la méthode validate ne retourne pas d'erreurs on fait l'insert dans la table
+            $user->setPassword(password_hash($_POST['password'], PASSWORD_DEFAULT));
+            $user->setRoles($strRoles);
+
             $errors = $user->validate();
+
             if (empty($errors)) {
-                // On transforme l'objet User courant en tableau
-                // Avec uniquement les valeurs des propriétés
-                // Voir la methode toArray() dans User.php
-                $userArray = $user->toArray();
-                // On instancie un UserManager
                 $userManager = new UserManager();
-                // On effectue l'insert dans la table
-                $insert = $userManager->createUser($userArray);
-                // ON redirige !
+                $userManager->insert($user->toArray());
                 header('Location: index.php?page=user&action=login');
+                exit; // Ajouté pour arrêter l'exécution après la redirection
             }
         }
-        $this->render(__DIR__ . '/../views/template_register.phtml', [
-            '$_POST' => $_POST,
-            'user' => $user,
-            'errors' => $errors
-        ]);
+
+        $this->render(__DIR__ . '/../views/template_register.phtml', []);
     }
 }

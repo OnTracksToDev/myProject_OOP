@@ -10,7 +10,7 @@ class ArticleController extends Controller
     public function index()
     {
         $articleManager = new ArticleManager();
-        $data['article'] = $articleManager->getAllArticle();
+        $data['article'] = $articleManager->getAll();
         $this->render('./views/template_home.phtml', [$data]);
     }
 

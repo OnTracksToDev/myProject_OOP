@@ -1,12 +1,15 @@
 <?php
 namespace App\Models;
 
+use DateTime;
+
 class User  extends AbstractTable{
     private ?string $username = null;
     private ?string $email = null;
     private ?string $password = null;
-    private ?array $roles = [];
-    private ?string $profileImg= null;
+    private ?string $roles = null;
+    private ?string $profile_image_path= null;
+    private?string $date_register = null;
 
 
     public function setUserName(?string $username){
@@ -33,25 +36,35 @@ class User  extends AbstractTable{
         return $this->password;
     }
 
-    public function setRoles(?array $roles){
+    public function setRoles(?string $roles){
         $this->roles = $roles;
     }
 
     public function getRoles(){
         return $this->roles;
     }
-    public function setProfilImagePath(?string $profileImg){
-        $this->profileImg = $profileImg;
+    public function setProfilImagePath(?string $profile_image_path){
+        $this->profile_image_path = $profile_image_path;
     }
     public function getProfilImagePath() {
-        return $this->profileImg;
+        return $this->profile_image_path;
     }
+    public function setDateRegister(?DateTime $date_register){
+        $this->date_register = $date_register;
+    }
+    public function getDateRegister() {
+        return $this->date_register;
+    }
+
 
     public function toArray(): array {
         $userArray = [
-            $this->username,
-            $this->email,
-            password_hash($this->password,PASSWORD_DEFAULT)
+            $this->getUserName(),
+            $this->getEmail(),
+            $this->getPassword(),
+            $this->getRoles(),
+            $this->getProfilImagePath(),
+            $this->getDateRegister()
         ];
         return $userArray;
     }

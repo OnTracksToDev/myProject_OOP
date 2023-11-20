@@ -13,8 +13,8 @@ class AdminController extends Controller
     {
         $userManager = new UserManager();
         $articleManager = new ArticleManager();
-        $data['articles'] = $articleManager->getAllArticle();
-        $data['users'] = $userManager->getAllUser();
+        $data['articles'] = $articleManager->getAll();
+        $data['users'] = $userManager->getAll();
         $this->render(__DIR__ . '/../views/admin/dashboard.phtml', $data);
     }
 
@@ -23,14 +23,14 @@ class AdminController extends Controller
     public function manageUsers()
     {
         $userManager = new UserManager();
-        $data['users'] = $userManager->getAllUser();
+        $data['users'] = $userManager->getAll();
         $this->render(__DIR__ . '/../views/admin/users/manage_users.phtml', $data);
     }
 
     public function manageArticles()
     {
         $articleManager = new ArticleManager();
-        $data['articles'] = $articleManager->getAllArticle();
+        $data['articles'] = $articleManager->getAll();
         $this->render(__DIR__ . '/../views/admin/articles/manage_articles.phtml', $data);
     }
 }

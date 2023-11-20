@@ -12,8 +12,8 @@ class HomeController extends Controller
     public function index()
     {
         $article = new ArticleManager();
-        $data['article'] = $article->getAllArticle();
-        $data['caroussel'] = $article->getRecentArticle(3);
+        $data['article'] = $article->getAll();
+        $data['caroussel'] = $article->getAll(3);
         $this->render(__DIR__ . '/../views/template_home.phtml', $data);
     }
 
