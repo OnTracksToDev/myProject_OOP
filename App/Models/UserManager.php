@@ -16,7 +16,9 @@ class UserManager
     public function getAllUser($limit = null)
     {
         $limitIs = !is_null($limit) ? "LIMIT" . $limit : "";
-        $query = "SELECT * FROM users 
+        //diférencier l'id de users.id avec l'id de l'article
+        $query = "SELECT users.id, users.username, users.email, users.password, users.role, users.profile_image_path, users.date_register,
+        articles.id AS article_id, articles.title, articles.content, articles.user_id AS article_user_id, articles.image_path, articles.date_publication FROM users 
            LEFT JOIN articles ON users.id = articles.user_id
             ORDER BY users.id DESC" . $limitIs;
 

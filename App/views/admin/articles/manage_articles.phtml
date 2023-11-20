@@ -1,0 +1,48 @@
+
+<?php $title = 'Admin Manage Articles'?>
+<?php $articles = $data['articles'];?>
+
+
+
+
+<h1>Manage Article</h1>
+<a href="?page=articles&action=add" class="btn btn-primary m-1">Add Article</a>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Source</th>
+      <th scope="col">Title</th>
+      <th scope="col">Content</th>
+      <th scope="col">Author</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+  <?php foreach ($articles as $article) : ?>
+    <tr>
+      <th scope="row"><?= $article['id'] ?></th>
+      <td><img width="80" src="<?= $article['image_path'] ?>" alt="<?= $article['title'] ?>"></td>
+      <td><?= $article['title'] ?></td>
+      <td><?= $article['content'] ?></td>
+      <td><?= $article['username'] ?></td>
+      <td>
+        <a href="?page=admin&action=updateArticle&id=<?= $article['id'] ?>" class="btn btn-success m-1">Update</a>
+        <a href="?page=admin&action=deleteArticle&id=<?= $article['id'] ?>" class="btn btn-danger m-1">Delete</a>
+        <a href="javascript:deleteArticle(<?= $article['id'] ?>)" class="btn btn-warning m-1">Delete? (confirmJS)</a>
+      </td>
+    </tr>
+  <?php endforeach ?>
+  </tbody>
+</table>
+
+<script>
+  function deleteArticle(id){
+    const question = window.confirm("Are you sure you want to delete "+id+" ?");
+    if (question){
+      location.href="?page=admin_deleteArticle&id="+id;
+    }
+  }
+</script>
+<a href="?page=admin&action=dashboard" class="btn btn-primary m-1">Retour Admin Dashboard</a>
