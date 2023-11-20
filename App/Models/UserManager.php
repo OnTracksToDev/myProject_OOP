@@ -25,32 +25,46 @@ class UserManager
 
     public function getUserById($id = null)
 
-{
-    $whereIs = !is_null($id) ? "WHERE users.id=?" : "";
-    //diférencier l'id de users.id avec l'id de l'article
-    $query = "SELECT users.id, users.username, users.email, users.password, users.role, users.profile_image_path, users.date_register,
+    {
+        $whereIs = !is_null($id) ? "WHERE users.id=?" : "";
+        //diférencier l'id de users.id avec l'id de l'article
+        $query = "SELECT users.id, users.username, users.email, users.password, users.role, users.profile_image_path, users.date_register,
               articles.id AS article_id, articles.title, articles.content, articles.user_id AS article_user_id, articles.image_path, articles.date_publication
               FROM users
               LEFT JOIN articles ON users.id = articles.user_id
               {$whereIs}
               LIMIT 1";
-    return $this->db->select($query, [$id]);
-}
+        return $this->db->select($query, [$id]);
+    }
 
 
- 
+
     public function getUserByMail($mail = null)
-{
-    $whereIs = !is_null($mail) ? "WHERE users.email=?" : "";
-    $query = "SELECT users.id, users.username, users.email, users.password, users.role, users.profile_image_path, users.date_register,
-              articles.id AS article_id, articles.title, articles.content, articles.user_id AS article_user_id, articles.image_path, articles.date_publication
+    {
+        $whereIs = !is_null($mail) ? "WHERE users.email=?" : "";
+        $query =
+            "SELECT 
+              users.id, 
+              users.username, 
+              users.password,
+              users.email, 
+              users.role, 
+              users.profile_image_path, 
+              users.date_register,
+              articles.id AS article_id, 
+              articles.title, 
+              articles.content, 
+              articles.user_id AS article_user_id, 
+              articles.image_path, 
+              articles.date_publication
               FROM users
               LEFT JOIN articles ON users.id = articles.user_id
               {$whereIs}
               LIMIT 1";
 
-    return $this->db->select($query, [$mail]);
-}
+
+        return $this->db->select($query, [$mail]);
+    }
 
 
 

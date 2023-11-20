@@ -38,7 +38,7 @@ class UserController extends Controller
             if (!empty($mail) && !empty($password)) {
                 $userManager = new UserManager();
                 $user = $userManager->getUserByMail($mail);
-                var_dump($user);
+                
 
                             if ($user) {
                                 $hashedPasswordFromDatabase = $user['password'];
