@@ -67,7 +67,7 @@
                     <?php endforeach ?>
                     <?php if (isset($_SESSION['user'])) : ?>
                         <li class="nav-item">
-                            <a class="nav-link <?php if (isset($_GET['page']) && $_GET['page'] === "user" && isset($_GET['action']) && $_GET['action'] === "index") echo "active"; ?>" href="?page=user&action=index">
+                            <a class="nav-link" href="?page=user&action=index">
                                 Profile
                             </a>
                         </li>
@@ -80,19 +80,19 @@
                         <ul class="dropdown-menu">
                             <?php if (!isset($_SESSION['user'])) : ?>
 
-                                <li><a class="dropdown-item" href="?page=user&action=login">Log In</a></li>
+                                <li><a class="dropdown-item" href="?page=login&action=index">Log In</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><a class="dropdown-item" href="?page=user&action=register">Register</a></li>
+                                <li><a class="dropdown-item" href="?page=register&action=index">Register</a></li>
                             <?php else : ?>
-                                <?php if ($_SESSION['user']['role'] === 'admin') : ?>
-                                    <li><a class="dropdown-item" href="?page=admin&action=dashboard">Admin Dashboard</a></li>
+                                <?php if (!App\Services\Authentication::isNotAllowed("ROLE_ADMIN")): ?> 
+                                <li><a class="dropdown-item" href="?page=admin&action=dashboard">Admin Dashboard</a></li>
                                 <?php endif; ?>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><a class="dropdown-item" href="?page=signout&action=index">Logout</a></li>
+                                <li><a class="dropdown-item" href="?page=logout&action=index">Logout</a></li>
                             <?php endif; ?>
                         </ul>
                     </li>

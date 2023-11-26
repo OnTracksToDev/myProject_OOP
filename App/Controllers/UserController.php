@@ -3,85 +3,76 @@
 namespace App\Controllers;
 
 use App\Controllers\Controller;
-use App\Models\UserManager;
 use App\Models\User;
+use App\Models\UserManager;
+use App\Services\Authentication;
 
 class UserController extends Controller
 {
+
+    public function __construct()
+    {
+
+        if (!isset($_SESSION['user'])) {
+            header("Location:?page=login");
+            exit;
+        }
+    }
+
     public function index()
     {
         $userManager = new UserManager();
-        // si l'utilisateur est connecté 
+        // Si l'utilisateur est connecté
         if (isset($_SESSION['user'])) {
             $userId = $_SESSION['user']['id'];
-
             $data['user'] = $userManager->getById($userId);
-
+            $data['comments'] = $userManager->getAllCommentsByUser($userId);
+            $data['articles'] = $userManager->getAllArticlesByUser($userId);
+            
             if ($data['user']) {
                 $this->render(__DIR__ . '/../views/template_profile.phtml', $data);
             } else {
-                echo "utilisateur inconnue";
+                echo "Utilisateur inconnu.";
             }
         } else {
             echo 'Il faut se connecter';
         }
     }
 
-
-    public function login()
+    public function editProfileUser()
     {
-        $data = [];
+        $id = intval($_GET['id']);
+        $userManager = new UserManager();
+        $user = $userManager->getById($id);
+
         if (isset($_POST['submit'])) {
-            $mail = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-            $password = $_POST['password'];
+            if ($user !== null) {
+                $editUser = new User();
+                $editUser->setUserName($_POST['username']);
+                $editUser->setEmail($_POST['email']);
 
-            if (!empty($mail) && !empty($password)) {
-                $userManager = new UserManager();
-                $user = $userManager->getUserByEmail($mail);
-
-
-                if ($user) {
-                    $hashedPasswordFromDatabase = $user['password'];
-                    if (password_verify($password, $hashedPasswordFromDatabase)) {
-                        $successMessage = 'Connexion réussie !';
-                        $data['successMessage'] = $successMessage;
-                        $_SESSION['user'] = $user;
-                        $_SESSION['user']['id'] = $user['id'];
-
-                        header('Location: index.php?page=user&action=index');
-                    }
+                if (!empty($_POST['new_password'])) {
+                    $editUser->setPassword(password_hash($_POST['new_password'], PASSWORD_DEFAULT));
                 } else {
-                    $errorMessage = 'Aucun utilisateur trouvé avec cette adresse e-mail.';
+                    $editUser->setPassword($user['password']);
                 }
-                // return $errorMessage;// !!!!!! ERREUR NON RETOURNÉE (undefined)
-            }
-        }
-        $this->render(__DIR__ . '/../views/template_login.phtml', $data);
-    }
 
+                // rôles existants
+                $existingRoles = $_SESSION['user']['roles'];
+                $editUser->setRoles($existingRoles);
 
-    public function register()
-    {
-        if (isset($_POST['submit'])) {
-            $roles = isset($_POST['roles']) ? explode(",", $_POST['roles']) : [];
-            $strRoles = json_encode($roles);
+                $editUserArray = $editUser->toArray();
+                $editUserArray[] = $id;
 
-            $user = new User();
-            $user->setUserName($_POST['name']);
-            $user->setEmail($_POST['email']);
-            $user->setPassword(password_hash($_POST['password'], PASSWORD_DEFAULT));
-            $user->setRoles($strRoles);
-
-            $errors = $user->validate();
-
-            if (empty($errors)) {
                 $userManager = new UserManager();
-                $userManager->insert($user->toArray());
-                header('Location: index.php?page=user&action=login');
-                exit; // Ajouté pour arrêter l'exécution après la redirection
+                $userManager->update($editUserArray);
+                header("Location:?page=user&action=index");
+                exit;
             }
         }
 
-        $this->render(__DIR__ . '/../views/template_register.phtml', []);
+        $this->render(__DIR__ . '/../views/template_profile_edit.phtml', [
+            "user" => $user
+        ]);
     }
 }

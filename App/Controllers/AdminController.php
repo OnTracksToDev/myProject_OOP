@@ -5,10 +5,20 @@ namespace App\Controllers;
 use App\Controllers\Controller;
 use App\Models\ArticleManager;
 use App\Models\UserManager;
+use App\Services\Authentication;
 
 
 class AdminController extends Controller
 {
+
+    public function __construct()
+    {
+        
+        if (Authentication::isNotAllowed("ROLE_ADMIN")) {
+            header("Location:?page=login");
+        }
+        
+    }
     public function index()
     {
         $userManager = new UserManager();

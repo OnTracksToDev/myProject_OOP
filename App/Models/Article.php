@@ -7,12 +7,12 @@ use DateTime;
 class Article extends AbstractTable
 {
 
-    private ?string $title = null;
-    private ?string $content = null;
-    private ?string $image_path = null;
-    private ?string $user_id = null;
-    private ?DateTime $date_publication = null;
-    private?DateTime $date_update = null;
+   protected ?string $title = null;
+   protected ?string $content = null;
+   protected ?string $image_path = null;
+   protected ?string $user_id = null;
+   private ?DateTime $date_publication = null;
+   protected ?DateTime $date_update = null;
 
     public function setTitle(?string $title)
     {
@@ -74,9 +74,6 @@ class Article extends AbstractTable
     }
 
 
-    public static function count()
-    {
-    }
     public function toArray(): array
     {
         $articleArray = [
@@ -86,9 +83,9 @@ class Article extends AbstractTable
             $this->getUserId(),
             $this->getDateUpdate()
         ];
-        return $articleArray;
+            return $articleArray;
     }
-
+    
     /**
      * Valide les données de l'article et retourne un tableau d'erreurs.
      */

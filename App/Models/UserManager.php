@@ -38,5 +38,32 @@ class UserManager extends AbstractManager
         return $row;
     }
 
+    
+    public function getAllCommentsByUser($userID)
+    {
+        $query = "
+        SELECT *
+        FROM users
+        JOIN comments ON comments.user_id = users.id
+        JOIN articles ON articles.id = comments.article_id
+        WHERE users.id = ?
+        ";
+        
+        $result = self::$db->selectAll($query, [$userID]);
+        return $result;
+    }
+    public function getAllArticlesByUser($userID)
+    {
+        $query = "
+        SELECT *
+            FROM users
+            JOIN articles ON articles.user_id = users.id
+            WHERE users.id =?
+        ";
+        
+        $result = self::$db->selectAll($query, [$userID]);
+        return $result;
+    }
 
+    
 }

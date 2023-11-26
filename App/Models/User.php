@@ -4,12 +4,12 @@ namespace App\Models;
 use DateTime;
 
 class User  extends AbstractTable{
-    private ?string $username = null;
-    private ?string $email = null;
-    private ?string $password = null;
-    private ?string $roles = null;
-    private ?string $profile_image_path= null;
-    private?string $date_register = null;
+   protected ?string $username = null;
+   protected ?string $email = null;
+   protected ?string $password = null;
+   protected ?string $roles = null;
+   protected ?string $profile_image_path= null;
+   private ?string $date_register = null;
 
 
     public function setUserName(?string $username){
@@ -43,16 +43,16 @@ class User  extends AbstractTable{
     public function getRoles(){
         return $this->roles;
     }
-    public function setProfilImagePath(?string $profile_image_path){
+    public function setProfil_image_path(?string $profile_image_path){
         $this->profile_image_path = $profile_image_path;
     }
-    public function getProfilImagePath() {
+    public function getProfil_image_path() {
         return $this->profile_image_path;
     }
-    public function setDateRegister(?DateTime $date_register){
+    public function setDate_register(?DateTime $date_register){
         $this->date_register = $date_register;
     }
-    public function getDateRegister() {
+    public function getDate_register() {
         return $this->date_register;
     }
 
@@ -63,8 +63,7 @@ class User  extends AbstractTable{
             $this->getEmail(),
             $this->getPassword(),
             $this->getRoles(),
-            $this->getProfilImagePath(),
-            $this->getDateRegister()
+            $this->getProfil_image_path(),
         ];
         return $userArray;
     }
