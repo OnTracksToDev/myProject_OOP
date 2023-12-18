@@ -36,10 +36,18 @@ class User  extends AbstractTable{
         return $this->password;
     }
 
-    public function setRoles(?string $roles){
-        $this->roles = $roles;
-    }
+    public function setRoles(string|array $roles) {
+        // Si $roles est une chaîne, convertissez-la en un tableau
+        if (is_string($roles)) {
+            $roles = explode(',', $roles);
+        }
 
+        // Assurez-vous que $roles est toujours un tableau
+        $roles = is_array($roles) ? $roles : [];
+
+        $this->roles = json_encode($roles);
+    }
+    
     public function getRoles(){
         return $this->roles;
     }

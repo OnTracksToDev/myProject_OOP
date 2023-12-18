@@ -21,6 +21,14 @@ abstract class AbstractManager
         return $results;
     }
 
+    public function getAllActiveUsers($nb = null): array|false
+{
+    $limit = !is_null($nb) ? "LIMIT " . $nb : "";
+    $results = self::$db->selectAll("SELECT * FROM " . self::$tableName . " WHERE users.deleted_at IS NULL ORDER BY id DESC " . $limit);
+    return $results;
+}
+
+
     public function getById($id = null): array
     {
         $whereId = !is_null($id) ? "WHERE id=?" : "";
@@ -37,9 +45,6 @@ abstract class AbstractManager
         $add = self::$db->query("INSERT INTO ".self::$tableName." (".implode(",",$fields).") VALUES (".implode(",",$values).")", $data);
         return $add;
     }
-
-
-
     public function update($data = [])
     {
         $fields = self::$obj->getVars();

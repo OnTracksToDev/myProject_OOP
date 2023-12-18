@@ -20,20 +20,23 @@ class Authentication
         $_SESSION['user'] = $userData;
     }
 
-    public function login(string $email,string $password): bool
+    public function login(string $email, string $password): bool
     {
         $verif = false;
         $userManager = new UserManager();
         $user = $userManager->getUserByEmail($email);
-        if ($user) {
-            $verif = password_verify($password,$user['password']);
+    
+        if ($user && password_verify($password, $user['password'])) {
+            // Vérif utilisateur supprimé
+            if ($user['deleted_at'] === null) {
+                $verif = true;
+                $this->setSessionData($user);
+            }
         }
-        if ($verif){
-            $this->setSessionData($user);
-        }
+    
         return $verif;
     }
-
+    
     public function logout(): void
     {
         session_destroy();

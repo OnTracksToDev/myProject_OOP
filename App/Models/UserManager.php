@@ -58,12 +58,16 @@ class UserManager extends AbstractManager
         SELECT *
             FROM users
             JOIN articles ON articles.user_id = users.id
-            WHERE users.id =?
+            WHERE users.id =? 
         ";
         
         $result = self::$db->selectAll($query, [$userID]);
         return $result;
     }
-
+    public function softDeleteUser($userId) {
+        $query = "UPDATE users SET deleted_at = NOW() WHERE id = ?";
+        $result= self::$db->select($query, [$userId]);
+        return $result;
+    }
     
 }

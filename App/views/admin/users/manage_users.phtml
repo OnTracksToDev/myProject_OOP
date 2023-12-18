@@ -1,7 +1,7 @@
 <?php $title = 'Admin Manage Users'?>
 <?php $users = $data['users'];?>
     <h1 class="mb-4">Manage Users</h1>
-    <a href="?page=user&action=register" class="btn btn-primary m-1">Add User</a>
+    <a href="?page=admin&action=admin_addUser" class="btn btn-primary m-1">Add User</a>
 
     <table class="table table-striped">
         <thead>
@@ -23,8 +23,8 @@
                     <td><?= $user['roles'] ?></td>
                     <td><?= $user['date_register'] ?></td>
                     <td>
-                        <a href="?page=admin&action=updateUser&id=<?= $user['id'] ?>" class="btn btn-success m-1">Update</a>
-                        <a href="?page=admin&action=deleteUser&id=<?= $user['id'] ?>" class="btn btn-danger m-1">Delete</a>
+                        <a href="?page=admin&action=admin_EditUser&id=<?= $user['id'] ?>" class="btn btn-success m-1">Update</a>
+                        <a href="?page=admin&action=admin_deleteUser&id=<?= $user['id'] ?>" class="btn btn-danger m-1">Delete</a>
                         <a href="javascript:deleteUser(<?= $user['id'] ?>)" class="btn btn-warning m-1">Delete? (confirmJS)</a>
                     </td>
                 </tr>
@@ -35,7 +35,7 @@
   function deleteUser(id){
     const question = window.confirm("Are you sure you want to delete "+id+" ?");
     if (question){
-      location.href="?page=admin_deleteUser&id="+id;
+      location.href="?page=admin&action=admin_deleteUser&id="+id;
     }
   }
 </script>

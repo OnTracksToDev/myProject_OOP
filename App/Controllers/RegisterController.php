@@ -13,7 +13,6 @@ class RegisterController extends Controller
     {
         $user = new User();
 
-        // On anticipe d'éventuelles erreurs en créant un tableau
         $errors = [];
         $userAdded = false;
         if (isset($_POST['submit'])) {
