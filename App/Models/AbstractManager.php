@@ -16,17 +16,10 @@ abstract class AbstractManager
     public function getAll($nb = null): array|false
     {
         $limit = !is_null($nb) ? "LIMIT " . $nb : "";
-        $results = [];
-        $results = self::$db->selectAll("SELECT * from " . self::$tableName . " ORDER BY id DESC " . $limit);
+        $results = self::$db->selectAll("SELECT * FROM " . self::$tableName . " WHERE isActive = 1 ORDER BY id DESC " . $limit);
         return $results;
     }
-
-    public function getAllActiveUsers($nb = null): array|false
-{
-    $limit = !is_null($nb) ? "LIMIT " . $nb : "";
-    $results = self::$db->selectAll("SELECT * FROM " . self::$tableName . " WHERE users.deleted_at IS NULL ORDER BY id DESC " . $limit);
-    return $results;
-}
+    
 
 
     public function getById($id = null): array
@@ -40,17 +33,21 @@ abstract class AbstractManager
     public function insert($data = [])
     {
         $fields = self::$obj->getVars();
-        $values = []; 
-        foreach($fields as $v){ $values[] = "?"; }
-        $add = self::$db->query("INSERT INTO ".self::$tableName." (".implode(",",$fields).") VALUES (".implode(",",$values).")", $data);
+        $values = [];
+        foreach ($fields as $v) {
+            $values[] = "?";
+        }
+        $add = self::$db->query("INSERT INTO " . self::$tableName . " (" . implode(",", $fields) . ") VALUES (" . implode(",", $values) . ")", $data);
         return $add;
     }
     public function update($data = [])
     {
         $fields = self::$obj->getVars();
-        $values = []; 
-        foreach($fields as $k => $v){ $values[] = $v."=?"; }  
-        $update = self::$db->query("UPDATE ".self::$tableName." SET ".implode(",",$values)." WHERE id=?", $data);
+        $values = [];
+        foreach ($fields as $k => $v) {
+            $values[] = $v . "=?";
+        }
+        $update = self::$db->query("UPDATE " . self::$tableName . " SET " . implode(",", $values) . " WHERE id=?", $data);
         return $update;
     }
 
