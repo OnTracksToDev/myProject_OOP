@@ -1,13 +1,25 @@
 <?php $title = "User profile"; ?>
-<?php $user= $data['user'];
-$comments =$data['comments'];
-$articles =$data['articles'];
+<?php $user = $data['user'];
+$comments = $data['comments'];
+$articles = $data['articles'];
 ?>
-<h1>Welcome, <?= $user['username']; ?>!</h1>
-    
-    <?php if ($user): ?>
+<style>
+
+    .profile-img {
+        max-width: 150px;
+        border-radius: 50%;
+    }
+</style>
+
+<div class="container">
+    <h1 class="mt-4">Welcome, <?= $user['username']; ?>!</h1>
+
+    <?php if ($user) : ?>
         <div class="card mt-4">
             <div class="card-body">
+
+                <!-- Profile Image -->
+                <img src="<?= $user['profile_image_path']; ?>" alt="<?= $user['username']; ?>" class="profile-img mx-auto d-block mb-3">
 
                 <h5 class="card-title">User Information</h5>
                 <ul class="list-group">
@@ -17,14 +29,15 @@ $articles =$data['articles'];
                     <li class="list-group-item"><strong>Role:</strong> <?= $user['roles'] ?></li>
                     <li class="list-group-item"><strong>Date Registered:</strong> <?= $user['date_register'] ?></li>
                 </ul>
-                <a href="?page=user&action=editProfileUser&id=<?= $user['id']?>" class="btn btn-primary">Edit Profile</a>
+                <a href="?page=user&action=editProfileUser&id=<?= $user['id'] ?>" class="btn btn-primary mt-3">Edit Profile</a>
             </div>
         </div>
-        <?php if ($articles): ?>
+
+        <?php if ($articles) : ?>
             <div class="card mt-4">
                 <div class="card-body">
-                    <h5 class="card-title">Articles</h5>
-                    <?php foreach ($articles as $article): ?>
+                    <h5 class="card-title">User Articles</h5>
+                    <?php foreach ($articles as $article) : ?>
                         <ul class="list-group">
                             <li class="list-group-item"><strong>Title:</strong> <?= $article['title'] ?></li>
                             <li class="list-group-item"><strong>Content:</strong> <?= $article['content'] ?></li>
@@ -35,11 +48,12 @@ $articles =$data['articles'];
                 </div>
             </div>
         <?php endif; ?>
-        <?php if ($comments): ?>
+
+        <?php if ($comments) : ?>
             <div class="card mt-4">
                 <div class="card-body">
-                    <h5 class="card-title">Comments</h5>
-                    <?php foreach ($comments as $comment): ?>
+                    <h5 class="card-title">User Comments</h5>
+                    <?php foreach ($comments as $comment) : ?>
                         <ul class="list-group">
                             <li class="list-group-item"><strong>Title:</strong> <?= $comment['title'] ?></li>
                             <li class="list-group-item"><strong>Content:</strong> <?= $comment['content'] ?></li>
@@ -51,11 +65,10 @@ $articles =$data['articles'];
             </div>
         <?php endif; ?>
 
-    <?php else: ?>
+    <?php else : ?>
         <div class="alert alert-danger mt-4" role="alert">
-           Aucun utilisateur
+            Aucun utilisateur
         </div>
     <?php endif; ?>
 
 </div>
-

@@ -29,17 +29,18 @@ class CommentManager extends AbstractManager
         $result = self::$db->selectAll($query);
         return $result;
     }
-    public function getAllCommentsByArticle($articleID)
+    public function getAllCommentsWithAuthorByArticle($articleID)
     {
         $query = "
         SELECT
-    comments.*,
-    users.username As username
-    FROM comments
-    JOIN users ON comments.user_id = users.id
-    JOIN articles ON articles.id = comments.article_id
-    WHERE comments.article_id = ?;
-     ";
+        comments.*,
+        users.username As username,
+        users.profile_image_path AS profile_img
+        FROM comments
+        JOIN users ON comments.user_id = users.id
+        JOIN articles ON articles.id = comments.article_id
+        WHERE comments.article_id = ?;
+        ";
 
         $result = self::$db->selectAll($query, [$articleID]);
         return $result;

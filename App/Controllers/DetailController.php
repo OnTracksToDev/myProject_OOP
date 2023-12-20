@@ -18,10 +18,10 @@ class DetailController extends Controller{
         $id = intval($_GET['id']);
         
         $articleManager = new ArticleManager();
-        $data['article'] = $articleManager->getById($id);
+        $data['article'] = $articleManager->getActiveArticleById($id);
 
         $commentManager = new CommentManager();
-        $data['comments']= $commentManager->getAllCommentsByArticle($id);
+        $data['comments']= $commentManager->getAllCommentsWithAuthorByArticle($id);
 
         $this->render(__DIR__ . '/../views/template_detail.phtml',$data);
     }
