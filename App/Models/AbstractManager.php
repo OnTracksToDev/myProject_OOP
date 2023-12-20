@@ -22,11 +22,11 @@ abstract class AbstractManager
     
 
 
-    public function getById($id = null): array
+    public function getById($id = null): array |false
     {
         $whereId = !is_null($id) ? "WHERE id=?" : "";
         $row = [];
-        $row = self::$db->select("SELECT * from " . self::$tableName . " " . $whereId . "LIMIT 1", [$id]);
+        $row = self::$db->select("SELECT * from " . self::$tableName . " " . $whereId . " LIMIT 1", [$id]);
         return $row;
     }
 

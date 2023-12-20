@@ -4,10 +4,14 @@ namespace App\Controllers;
 
 use App\Controllers\Controller;
 use App\Models\ArticleManager;
-use App\Models\UserManager;
-
 use App\Models\Article;
+
+use App\Models\UserManager;
 use App\Models\User;
+
+use App\Models\CommentManager;
+use App\Models\Comment;
+
 use App\Services\Authentication;
 
 
@@ -198,4 +202,94 @@ class AdminController extends Controller
             "article" => $article
         ]);
     }
+
+    /**
+     * Comments
+     */
+
+    public function manageComments()
+    {
+        $commentManager = new CommentManager();
+        $data['comments'] = $commentManager->getAllActiveCommentsWithAuthors();
+        $this->render(__DIR__ . '/../views/admin/comments/manage_comments.phtml', $data);
+    }
+
+
+    public function admin_EditComment()
+    {
+        $id = intval($_GET['id']);
+        $commentManager = new CommentManager();
+        $comment = $commentManager->getById($id);
+
+        if (isset($_POST['submit'])) {
+            if ($comment !== null) {
+
+                $editComment = new Comment();
+                $editComment->setUserId($id);
+                $editComment->setContent($_POST['content']);
+                $editComment->setArticle_id($_POST['article_id']);
+
+                $editCommentArray = $editComment->toArray();
+                $editCommentArray[] = $id;
+
+                $commentManager = new CommentManager();
+                $commentManager->update($editCommentArray);
+                header("Location:?page=admin&action=manageComments");
+                exit;
+            }
+        }
+        $this->render(__DIR__ . '/../views/admin/comments/template_admin_edit_comment.phtml', [
+            "comment" => $comment
+        ]);
+    }
+
+    public function admin_deleteComment()
+    {
+        if (isset($_GET['id'])) {
+            $id = intval($_GET['id']);
+            $commentManager = new CommentManager();
+
+            // Marquer le Comment comme supprimé en mettant à jour la colonne deleted_at
+            $commentManager->softDeleteComment($id);
+
+            header("Location:?page=admin&action=manageComments");
+        }
+    }
+
+
+
+    public function admin_AddComment()
+    {
+        $comment = new Comment();
+
+        $errors = [];
+        $commentAdded = false;
+        if (isset($_POST['submit'])) {
+
+            $comment->setUserId($_POST['user_id']);
+            $comment->setContent($_POST['content']);
+            $comment->setArticle_id($_POST['article_id']);
+            $errors = $comment->validate();
+
+            if (empty($errors)) {
+                $commentArray = $comment->toArray();
+                var_dump($commentArray);
+                // On instancie un CommentManager
+                $commentManager = new CommentManager();
+                // On effectue l'insert dans la table
+                $commentManager->insert($commentArray);
+                $commentAdded = true;
+                header('Location: index.php?page=admin&action=manageComments');
+                exit; // Ajouté pour arrêter l'exécution après la redirection
+            }
+        }
+        $this->render(__DIR__ . '/../views/admin/comments/template_admin_addComment.phtml', [
+            'errors' => $errors,
+            'commentAdded' => $commentAdded
+        ]);
+    }
+
+
+
+
 }
