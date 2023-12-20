@@ -17,9 +17,11 @@ $article = $data['article'];
             Created At: <?= $article['date_publication'] ?> | Updated At: <?= $article['date_update'] ?>
           </p>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6 d-flex">
           <p class="fst-italic font-weight-light small">User ID: <?= $article['user_id'] ?></p>
+          <img src="<?= $article['profile_image_path'] ?>" alt="Profile Picture of <?= $article['username'] ?>" class="rounded-circle ms-2" style="width: 20px; height: 20px;">
           <p class="fst-italic font-weight-light small">Username: <?= $article['username'] ?></p>
+
 
         </div>
       </div>
@@ -56,7 +58,7 @@ $article = $data['article'];
       ?>
         <div class="d-flex flex-start">
           <div class="card-body border">
-          <img src="<?= $comment['profile_img'] ?>" alt="Profile Picture of <?= $comment['username'] ?>" class="rounded-circle me-2" style="width: 20px; height: 20px;">
+            <img src="<?= $comment['profile_img'] ?>" alt="Profile Picture of <?= $comment['username'] ?>" class="rounded-circle me-2" style="width: 20px; height: 20px;">
             <h6 class="fw-bold mb-1"><?= ($comment['username']) ?></h6>
             <div class="d-flex align-items-center mb-3">
               <p class="mb-0">
@@ -82,6 +84,7 @@ $article = $data['article'];
         ?>
           <div class="d-flex flex-start card-body border">
             <div>
+              <img src="<?= $comment['profile_img'] ?>" alt="Profile Picture of <?= $comment['username'] ?>" class="rounded-circle me-2" style="width: 20px; height: 20px;">
               <h6 class="fw-bold mb-1"><?= ($comment['username']) ?></h6>
               <div class="d-flex align-items-center mb-3">
                 <p class="mb-0">
