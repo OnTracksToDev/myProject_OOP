@@ -1,8 +1,8 @@
 <?php $title = "Travel's Dream"; ?>
 
-        
+
 <?php $articles = $data['article'];
-$caroussel =$data['caroussel'];
+$caroussel = $data['caroussel'];
 
 
 
@@ -13,7 +13,7 @@ $caroussel =$data['caroussel'];
 
 
 <style>
-        .card-img-top {
+    .card-img-top {
         aspect-ratio: 16/9;
     }
 
@@ -24,7 +24,6 @@ $caroussel =$data['caroussel'];
     .card:hover {
         transform: scale(1.02);
     }
-
 </style>
 <section class="">
     <div id="homeCarousel" class="carousel slide" data-bs-touch="true">
@@ -61,33 +60,35 @@ $caroussel =$data['caroussel'];
     <div>
         <h1 class="text-center mt-3">Discover all the articles!</h1>
 
-<p>Explore the recent articles:</p>
+        <p>Explore the recent articles:</p>
     </div>
 
 
 
     <div class="row row-cols-1 row-cols-md-2 g-4">
-    <?php foreach ($articles as $article) : ?>
-        <div class="col">
+        <?php foreach ($articles as $article) : ?>
+            <div class="col">
 
                 <div class="card">
                     <img src="<?= $article['image_path'] ?>" class="card-img-top" alt="<?= $article['title'] ?>">
                     <div class="card-body">
                         <h5 class="card-title"><?= $article['title'] ?></h5>
-                        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                        <?php
+                        // Coupe en tableau de mots
+                        $words = explode(' ', $article['content']);
+                        // ex : 2 premiers mots en string
+                        $shortContent = implode(' ', array_slice($words, 0, 2));
+                        ?>
+                        <p class="card-text"><?= $shortContent ?>...</p>
                         <p class="card-text"><small class="text-muted">Last updated <?= $article['date_publication'] ?></small></p>
-                        <a href="index.php?action=article&id=<?= urlencode($article['id']) ?>" class="btn btn-secondary">Read me</a>
-
+                        <a href="index.php?page=detail&action=index&id=<?= urlencode($article['id']) ?>" class="btn btn-secondary">Read me</a>
                     </div>
                 </div>
 
-        </div>
+            </div>
 
         <?php endforeach  ?>
-       
+
     </div>
 
 </section>
-
-
-

@@ -1,0 +1,47 @@
+<?php $title = 'Admin Manage Comment' ?>
+<?php $comments = $data['comments']; ?>
+
+
+<h1>Manage Comment</h1>
+<a href="?page=admin&action=admin_addComment" class="btn btn-primary m-1">Add Comment</a>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Author</th>
+      <th scope="col">Content</th>
+      <th scope="col">Titre Article Parent</th>
+      <th scope="col">Date publication Article Parent</th>
+      <th scope="col">Actions</th>
+
+    </tr>
+  </thead>
+  <tbody>
+    <?php foreach ($comments as $comment) : ?>
+      <tr>
+        <th scope="row"><?= $comment['id'] ?></th>
+        <td><?= $comment['username'] ?></td>
+        <td><?= $comment['commentContent'] ?></td>
+        <td><?= $comment['title'] ?></td>
+        <td><?= $comment['date_publication'] ?></td>
+
+        <td>
+          <a href="?page=admin&action=admin_EditComment&id=<?= $comment['id'] ?>" class="btn btn-success m-1">Update</a>
+          <a href="?page=admin&action=admin_deleteComment&id=<?= $comment['id'] ?>" class="btn btn-danger m-1">Delete</a>
+          <a href="javascript:deleteComment(<?= $comment['id'] ?>)" class="btn btn-warning m-1">Delete? (confirmJS)</a>
+        </td>
+      </tr>
+    <?php endforeach ?>
+  </tbody>
+</table>
+
+<script>
+  function deleteComment(id) {
+    const question = window.confirm("Are you sure you want to delete " + id + " ?");
+    if (question) {
+      location.href = "?page=admin&action=admin_deleteComment&id=" + id;
+    }
+  }
+</script>
+<a href="?page=admin&action=dashboard" class="btn btn-primary m-1">Retour Admin Dashboard</a>

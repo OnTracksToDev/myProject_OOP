@@ -1,0 +1,45 @@
+<?php $title = "Admin Add Article" ?>
+<?php
+$errors = $data['errors'];
+$articleAdded = $data['articleAdded'];
+?>
+
+<h1>Admin Add Article</h1>
+<?php if (!empty($errors)) : ?>
+    <div class="alert alert-danger" role="alert">
+        <?php foreach ($errors as $error) : ?>
+            <p><?= $error ?></p>
+        <?php endforeach; ?>
+    </div>
+<?php endif; ?>
+
+
+<?php if (!$articleAdded) : ?>
+
+    <form method="POST">
+        <div class="mb-3">
+
+            <label for="user_id" class="form-label">Admin ID</label>
+            <input type="text" required class="form-control" id="user_id" name="user_id" value="<?=$_SESSION['user']['id']?>" readonly>
+            <label for="username" class="form-label">Admin username</label>
+            <input type="text" required class="form-control" id="username" name="username" value="<?=$_SESSION['user']['username']?>" readonly>
+
+            <label for="title" class="form-label">Title</label>
+            <input type="text" required class="form-control" id="title" name="title" placeholder="Your title">
+
+            <label for="content" class="form-label">Content</label>
+            <textarea class="form-control" id="content" name="content" placeholder="Your content" rows="5"></textarea>
+
+            <label for="image_path" class="form-label">Image Path</label>
+            <input type="text" required class="form-control" id="image_path" name="image_path" placeholder="Your image_path">
+
+            <button class="mt-4 btn btn-primary" type="submit" id="send" name="submit">Send</button>
+        </div>
+    </form>
+    <a href="?page=admin&action=manageArticles" class="btn btn-primary m-1">Retour Manage Articles</a>
+
+<?php else : ?>
+    <div class="alert alert-success" role="alert">
+        Article ajouté avec succès !!!
+    </div>
+<?php endif; ?>

@@ -1,0 +1,132 @@
+<?php
+$comments = $data['comments'];
+$article = $data['article'];
+?>
+
+
+
+<div class="container mt-5">
+  <div class="card">
+    <div class="card-body">
+      <h1 class="mb-3 text-center display-4">Title: <?= $article['title'] ?></h1>
+      <img src="<?= $article['image_path'] ?>" alt="<?= $article['title'] ?>" class="img-fluid rounded mb-4">
+      <p class="lead"><?= $article['content'] ?></p>
+      <div class="row">
+        <div class="col-md-6">
+          <p class="fst-italic font-weight-light small">
+            Created At: <?= $article['date_publication'] ?> | Updated At: <?= $article['date_update'] ?>
+          </p>
+        </div>
+        <div class="col-md-6 d-flex">
+          <p class="fst-italic font-weight-light small">User ID: <?= $article['user_id'] ?></p>
+          <img src="<?= $article['profile_image_path'] ?>" alt="Profile Picture of <?= $article['username'] ?>" class="rounded-circle ms-2" style="width: 20px; height: 20px;">
+          <p class="fst-italic font-weight-light small">Username: <?= $article['username'] ?></p>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex justify-content-center m-5">
+    <a href="?page=login" class="btn btn-success m-1">Connectez-vous pour ajouter un commentaire!</a>
+  </div>
+
+
+  <div class="card mt-4">
+    <div class="card-body p-4">
+      <h2 class="mb-3">Comments</h2>
+      <form>
+        <div class="mb-3">
+          <label for="comment" class="form-label">Leave a Comment</label>
+          <textarea class="form-control" id="comment" rows="3" placeholder="Write your comment"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Comment</button>
+      </form>
+      <!-- <div class="mt-4">
+            </div> -->
+    </div>
+    <div class="card-body p-4">
+      <?php
+      $commentCount = count($comments);
+      $displayLimit = 2; ?>
+      <h4 class="mb-0"><?= $commentCount > 1 ? $commentCount . " Commentaires" : $commentCount . " Commentaire" ?></h4>
+      <p class="fw-light mb-4 pb-2">Section des commentaires les plus récents par les utilisateurs</p>
+      <?php
+      //boucle 
+      for ($i = 0; $i < min($commentCount, $displayLimit); $i++) {
+        $comment = $comments[$i];
+      ?>
+        <div class="d-flex flex-start">
+          <div class="card-body border">
+            <img src="<?= $comment['profile_img'] ?>" alt="Profile Picture of <?= $comment['username'] ?>" class="rounded-circle me-2" style="width: 20px; height: 20px;">
+            <h6 class="fw-bold mb-1"><?= ($comment['username']) ?></h6>
+            <div class="d-flex align-items-center mb-3">
+              <p class="mb-0">
+                le <?= $comment['date_publication'] ?>
+              </p>
+            </div>
+            <p class="mb-0">
+              <?= nl2br(($comment['content'])) ?>
+            </p>
+            <a href="#!" class="link-muted">Editer<i class="fas fa-pencil-alt ms-2"></i></a>
+            <a href="#!" class="link-muted">Reply<i class="fas fa-redo-alt ms-2"></i></a>
+            <a href="#!" class="link-muted">Like<i class="fas fa-heart ms-2"></i></a>
+          </div>
+        </div>
+        <hr class="my-3" />
+      <?php } ?>
+
+      <div id="hiddenComments" style="display: none;">
+        <?php
+        // autres commentaires
+        for ($i = $displayLimit; $i < $commentCount; $i++) {
+          $comment = $comments[$i];
+        ?>
+          <div class="d-flex flex-start card-body border">
+            <div>
+              <img src="<?= $comment['profile_img'] ?>" alt="Profile Picture of <?= $comment['username'] ?>" class="rounded-circle me-2" style="width: 20px; height: 20px;">
+              <h6 class="fw-bold mb-1"><?= ($comment['username']) ?></h6>
+              <div class="d-flex align-items-center mb-3">
+                <p class="mb-0">
+                  le <?= $comment['date_publication'] ?>
+                </p>
+              </div>
+              <p class="mb-0">
+                <?= nl2br(($comment['content'])) ?>
+              </p>
+              <a href="#!" class="link-muted">Editer<i class="fas fa-pencil-alt ms-2"></i></a>
+              <a href="#!" class="link-muted">Reply<i class="fas fa-redo-alt ms-2"></i></a>
+              <a href="#!" class="link-muted">Like<i class="fas fa-heart ms-2"></i></a>
+            </div>
+          </div>
+          <hr class="my-3" />
+        <?php } ?>
+      </div>
+
+      <?php if ($commentCount > $displayLimit) { ?>
+        <button id="showMoreBtn" class="btn btn-primary">Afficher plus de commentaires</button>
+        <button id="showLessBtn" class="btn btn-primary" style="display: none;">Réduire les commentaires</button>
+
+        <script>
+          // Affichage liste Commentaires
+          let hiddenComments = document.getElementById("hiddenComments");
+          let showMoreBtn = document.getElementById("showMoreBtn");
+          let showLessBtn = document.getElementById("showLessBtn");
+
+          showMoreBtn.addEventListener("click", function() {
+            hiddenComments.style.display = "block";
+            showMoreBtn.style.display = "none";
+            showLessBtn.style.display = "block";
+          });
+
+          showLessBtn.addEventListener("click", function() {
+            hiddenComments.style.display = "none";
+            showMoreBtn.style.display = "block";
+            showLessBtn.style.display = "none";
+          });
+        </script>
+      <?php } ?>
+    </div>
+
+  </div>
+</div>

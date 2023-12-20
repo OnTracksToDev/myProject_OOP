@@ -1,0 +1,21 @@
+<?php
+var_dump($data['comment']);
+$comment =$data['comment'];
+?>
+<h1 class="mb-3 text-center">Admin Update Comment</h1>
+
+<form method="POST">
+        <div class="mb-3">
+            <label for="id" class="form-label">id</label>
+            <input type="text" required class="form-control" id="id" name="id" placeholder="<?=$comment['id']?>">
+
+            <label for="content" class="form-label">Content</label>
+            <textarea class="form-control" id="content" name="content" placeholder="<?=$comment['content']?>" rows="5"></textarea>
+
+            <label for="article_id" class="form-label">article_id</label>
+            <input type="text" required class="form-control" id="article_id" name="article_id" placeholder="<?=$comment['article_id']?>">
+
+            <button class="mt-4 btn btn-primary" type="submit" id="send" name="submit">Send</button>
+        </div>
+    </form>
+    <a href="?page=admin&action=manageComments" class="btn btn-primary m-1">Retour Manage Comments</a>

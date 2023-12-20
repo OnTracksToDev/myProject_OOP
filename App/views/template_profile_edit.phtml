@@ -1,0 +1,26 @@
+<?php
+var_dump($data['user']);
+$user =$data['user'];
+?>
+<h1 class="mb-3 text-center">Edit Profile</h1>
+<form method="POST">
+    <div class="mb-3">
+        <label for="username" class="form-label">Username</label>
+        <input value="<?= $user['username'] ?>" type="text" class="form-control" name="username" id="username" placeholder="username">
+    </div>
+    <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input value="<?= $user['email'] ?>" type="text" class="form-control" name="email" id="email" placeholder="email">
+    </div>
+    <div class="mb-3">
+        <label for="password" class="form-label">New Password</label>
+        <input type="password" class="form-control" name="new_password" id="new_password" placeholder="New password">
+    </div>
+    <div class="mb-3">
+        <label for="current_password" class="form-label">Current Password</label>
+        <input type="password" class="form-control" name="current_password" id="current_password" placeholder="Current password">
+    </div>
+    <div class="mb-3">
+        <input type="submit" class="btn btn-primary" name="submit" value="Edit Profile">
+    </div>
+</form>

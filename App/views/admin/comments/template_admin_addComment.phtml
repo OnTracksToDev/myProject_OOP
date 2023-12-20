@@ -1,0 +1,44 @@
+<?php $title = "Admin Add Comment" ?>
+<?php
+$errors = $data['errors'];
+$commentAdded = $data['commentAdded'];
+?>
+
+<h1>Admin Add Comment</h1>
+<?php if (!empty($errors)) : ?>
+    <div class="alert alert-danger" role="alert">
+        <?php foreach ($errors as $error) : ?>
+            <p><?= $error ?></p>
+        <?php endforeach; ?>
+    </div>
+<?php endif; ?>
+
+
+<?php if (!$commentAdded) : ?>
+
+    <form method="POST">
+        <div class="mb-3">
+
+
+            <label for="user_id" class="form-label">Admin ID</label>
+            <input type="text" required class="form-control" id="user_id" name="user_id" value="<?=$_SESSION['user']['id']?>" readonly>
+            <label for="username" class="form-label">Admin username</label>
+            <input type="text" required class="form-control" id="username" name="username" value="<?=$_SESSION['user']['username']?>" readonly>
+
+            <label for="article_id" class="form-label">article_id</label>
+            <input type="text" required class="form-control" id="article_id" name="article_id" placeholder="Your article_id">
+
+            <label for="content" class="form-label">Content</label>
+            <textarea class="form-control" id="content" name="content" placeholder="Your content" rows="5"></textarea>
+
+
+            <button class="mt-4 btn btn-primary" type="submit" id="send" name="submit">Send</button>
+        </div>
+    </form>
+    <a href="?page=admin&action=manageComments" class="btn btn-primary m-1">Retour Manage Comments</a>
+
+<?php else : ?>
+    <div class="alert alert-success" role="alert">
+       Commentaire ajouté avec succès !!!
+    </div>
+<?php endif; ?>

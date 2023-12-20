@@ -3,81 +3,54 @@
 namespace App\Models;
 
 use App\Services\Database;
+use App\Models\AbstractManager;
+use App\Models\Article;
 
-class ArticleManager
+class ArticleManager extends AbstractManager
 {
-    private $db;
 
     public function __construct()
     {
-        $this->db = new Database();
+        self::$db = new Database();
+        self::$tableName = 'articles';
+        self::$obj = new Article();
     }
 
-    public function getAllArticle($limit = null)
+    public function getAllActiveArticlesWithAuthors($nb = null): array|false
     {
-        $limitIs = !is_null($limit) ? "LIMIT " . $limit : "";
-        $query = "SELECT * FROM articles 
-            JOIN users ON articles.user_id = users.id
-            ORDER BY articles.id DESC" . $limitIs;
-
-        return $this->db->selectAll($query);
+        $query = "
+        SELECT *
+        FROM users
+        JOIN articles ON articles.user_id = users.id
+        WHERE articles.isActive = 1
+    ";
+        $result = self::$db->selectAll($query);
+        return $result;
     }
 
-    public function getArticleById($id = null)
-    {
-        $whereIs = !is_null($id) ? "WHERE articles.id=?" : "";
-        $query = "SELECT * FROM articles 
-            JOIN users ON articles.user_id = users.id {$whereIs} LIMIT 1";
 
-        return $this->db->select($query, [$id]);
+    public function getActiveArticleById($id = null): array | false
+    {
+        $whereId = !is_null($id) ? "WHERE " . self::$tableName . ".id=? AND " . self::$tableName . ".isActive=1" : "WHERE " . self::$tableName . ".isActive=1";
+        $row = [];
+        $query = "SELECT *, users.* 
+                  FROM " . self::$tableName . "
+                  LEFT JOIN users ON " . self::$tableName . ".user_id = users.id
+                  " . $whereId . " LIMIT 1";
+        $row = self::$db->select($query, [$id]);
+        return $row;
     }
 
-    public function createArticle($data = [])
+    public function softDeleteArticle($articleId)
     {
-        $query = "INSERT INTO articles (title, content, imagePath, id) VALUES (?,?,?,?)";
-        return $this->db->query($query, $data);
-    }
+        // Archive comments related to the article
+        $queryCommentsArticle = "UPDATE comments SET deleted_at = NOW(), isActive = FALSE WHERE article_id = ?";
+        self::$db->query($queryCommentsArticle, [$articleId]);
 
-    public function deleteArticle($id = null)
-    {
-        if (!is_null($id)) {
-            $query = "DELETE FROM articles WHERE id=?";
-            $this->db->query($query, [$id]);
-            return true;
-        }
+        // Soft delete the article
+        $queryArticle = "UPDATE articles SET deleted_at = NOW(), isActive = FALSE WHERE id = ?";
+        $result = self::$db->query($queryArticle, [$articleId]);
 
-        return false;
-    }
-
-    public function updateArticle($id, $imagePath, $title, $content, $user_id)
-    {
-        if (!is_null($id)) {
-            $query = "UPDATE articles SET imagePath=?, title=?, content=?, user_id=? WHERE id=?";
-            $params = [$imagePath, $title, $content, $user_id, $id];
-
-            return $this->db->query($query, $params);
-        }
-
-        return false;
-    }
-
-    public function getRecentArticle($limit = null)
-    {
-        $limitIs = !is_null($limit) ? " LIMIT " . $limit : "";
-        $query = "SELECT * FROM articles 
-            JOIN users ON articles.user_id = users.id
-            ORDER BY articles.id DESC" . $limitIs;
-    
-        return $this->db->selectAll($query);
-    }
-            
-
-
-    public function countAllArticle()
-    {
-        $query = "SELECT * FROM articles 
-            JOIN users ON articles.user_id = users.id";
-
-        return $this->db->count($query);
+        return $result;
     }
 }

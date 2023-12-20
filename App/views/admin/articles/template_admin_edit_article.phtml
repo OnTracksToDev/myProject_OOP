@@ -1,0 +1,21 @@
+<?php
+var_dump($data['article']);
+$article =$data['article'];
+?>
+<h1 class="mb-3 text-center">Admin Update Article</h1>
+
+<form method="POST">
+        <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" required class="form-control" id="title" name="title" placeholder="<?=$article['title']?>">
+
+            <label for="content" class="form-label">Content</label>
+            <textarea class="form-control" id="content" name="content" placeholder="<?=$article['content']?>" rows="5"></textarea>
+
+            <label for="image_path" class="form-label">Image Path</label>
+            <input type="text" required class="form-control" id="image_path" name="image_path" placeholder="<?=$article['image_path']?>">
+
+            <button class="mt-4 btn btn-primary" type="submit" id="send" name="submit">Send</button>
+        </div>
+    </form>
+    <a href="?page=admin&action=manageArticles" class="btn btn-primary m-1">Retour Manage Articles</a>

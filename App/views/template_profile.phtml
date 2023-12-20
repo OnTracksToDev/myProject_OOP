@@ -1,28 +1,44 @@
-  <?php $title = "User profile"; ?>
-<?php $user= $data['user']?>
-    <h1>User Profile</h1>
-    
-    <?php if ($user): ?>
+<?php $title = "User profile"; ?>
+<?php $user = $data['user'];
+$comments = $data['comments'];
+$articles = $data['articles'];
+?>
+<style>
+
+    .profile-img {
+        max-width: 150px;
+        border-radius: 50%;
+    }
+</style>
+
+<div class="container">
+    <h1 class="mt-4">Welcome, <?= $user['username']; ?>!</h1>
+
+    <?php if ($user) : ?>
         <div class="card mt-4">
             <div class="card-body">
+
+                <!-- Profile Image -->
+                <img src="<?= $user['profile_image_path']; ?>" alt="<?= $user['username']; ?>" class="profile-img mx-auto d-block mb-3">
+
                 <h5 class="card-title">User Information</h5>
                 <ul class="list-group">
                     <li class="list-group-item"><strong>ID:</strong> <?= $user['id'] ?></li>
                     <li class="list-group-item"><strong>Username:</strong> <?= $user['username'] ?></li>
                     <li class="list-group-item"><strong>Email:</strong> <?= $user['email'] ?></li>
-                    <li class="list-group-item"><strong>Role:</strong> <?= $user['role'] ?></li>
+                    <li class="list-group-item"><strong>Role:</strong> <?= $user['roles'] ?></li>
                     <li class="list-group-item"><strong>Date Registered:</strong> <?= $user['date_register'] ?></li>
                 </ul>
+                <a href="?page=user&action=editProfileUser&id=<?= $user['id'] ?>" class="btn btn-primary mt-3">Edit Profile</a>
             </div>
         </div>
 
-        <?php if (!empty($user['articles'])): ?>
+        <?php if ($articles) : ?>
             <div class="card mt-4">
                 <div class="card-body">
-                    <h5 class="card-title">Articles</h5>
-                    <?php foreach ($user['articles'] as $article): ?>
+                    <h5 class="card-title">User Articles</h5>
+                    <?php foreach ($articles as $article) : ?>
                         <ul class="list-group">
-                            <li class="list-group-item"><strong>Article ID:</strong> <?= $article['id'] ?></li>
                             <li class="list-group-item"><strong>Title:</strong> <?= $article['title'] ?></li>
                             <li class="list-group-item"><strong>Content:</strong> <?= $article['content'] ?></li>
                             <li class="list-group-item"><strong>Date Publication:</strong> <?= $article['date_publication'] ?></li>
@@ -33,11 +49,26 @@
             </div>
         <?php endif; ?>
 
-    <?php else: ?>
+        <?php if ($comments) : ?>
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title">User Comments</h5>
+                    <?php foreach ($comments as $comment) : ?>
+                        <ul class="list-group">
+                            <li class="list-group-item"><strong>Title:</strong> <?= $comment['title'] ?></li>
+                            <li class="list-group-item"><strong>Content:</strong> <?= $comment['content'] ?></li>
+                            <li class="list-group-item"><strong>Date Publication:</strong> <?= $comment['date_publication'] ?></li>
+                        </ul>
+                        <hr>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        <?php endif; ?>
+
+    <?php else : ?>
         <div class="alert alert-danger mt-4" role="alert">
-           Aucun utilisateur
+            Aucun utilisateur
         </div>
     <?php endif; ?>
 
 </div>
-

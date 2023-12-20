@@ -1,12 +1,15 @@
 <?php
 namespace App\Models;
 
+use DateTime;
+
 class User  extends AbstractTable{
-    private ?string $username = null;
-    private ?string $email = null;
-    private ?string $password = null;
-    private ?array $roles = [];
-    private ?string $profileImg= null;
+   protected ?string $username = null;
+   protected ?string $email = null;
+   protected ?string $password = null;
+   protected ?string $roles = null;
+   protected ?string $profile_image_path= null;
+   private ?string $date_register = null;
 
 
     public function setUserName(?string $username){
@@ -33,25 +36,42 @@ class User  extends AbstractTable{
         return $this->password;
     }
 
-    public function setRoles(?array $roles){
-        $this->roles = $roles;
-    }
+    public function setRoles(string|array $roles) {
+        // Si $roles est une chaîne, convertissez-la en un tableau
+        if (is_string($roles)) {
+            $roles = explode(',', $roles);
+        }
 
+        // Assurez-vous que $roles est toujours un tableau
+        $roles = is_array($roles) ? $roles : [];
+
+        $this->roles = json_encode($roles);
+    }
+    
     public function getRoles(){
         return $this->roles;
     }
-    public function setProfilImagePath(?string $profileImg){
-        $this->profileImg = $profileImg;
+    public function setProfil_image_path(?string $profile_image_path){
+        $this->profile_image_path = $profile_image_path;
     }
-    public function getProfilImagePath() {
-        return $this->profileImg;
+    public function getProfil_image_path() {
+        return $this->profile_image_path;
     }
+    public function setDate_register(?DateTime $date_register){
+        $this->date_register = $date_register;
+    }
+    public function getDate_register() {
+        return $this->date_register;
+    }
+
 
     public function toArray(): array {
         $userArray = [
-            $this->username,
-            $this->email,
-            password_hash($this->password,PASSWORD_DEFAULT)
+            $this->getUserName(),
+            $this->getEmail(),
+            $this->getPassword(),
+            $this->getRoles(),
+            $this->getProfil_image_path(),
         ];
         return $userArray;
     }

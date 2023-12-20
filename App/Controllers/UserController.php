@@ -3,96 +3,76 @@
 namespace App\Controllers;
 
 use App\Controllers\Controller;
-use App\Models\UserManager;
 use App\Models\User;
+use App\Models\UserManager;
+use App\Services\Authentication;
 
 class UserController extends Controller
 {
+
+    public function __construct()
+    {
+
+        if (!isset($_SESSION['user'])) {
+            header("Location:?page=login");
+            exit;
+        }
+    }
+
     public function index()
     {
         $userManager = new UserManager();
-        // si l'utilisateur est connecté 
+        // Si l'utilisateur est connecté
         if (isset($_SESSION['user'])) {
             $userId = $_SESSION['user']['id'];
+            $data['user'] = $userManager->getById($userId);
+            $data['comments'] = $userManager->getAllCommentsByUser($userId);
+            $data['articles'] = $userManager->getAllArticlesByUser($userId);
             
-            $data['user'] = $userManager->getUserById($userId);
-
             if ($data['user']) {
                 $this->render(__DIR__ . '/../views/template_profile.phtml', $data);
             } else {
-                echo "utilisateur inconnue";
+                echo "Utilisateur inconnu.";
             }
         } else {
             echo 'Il faut se connecter';
         }
     }
 
-
-    public function login()
+    public function editProfileUser()
     {
-        $data = [];
+        $id = intval($_GET['id']);
+        $userManager = new UserManager();
+        $user = $userManager->getById($id);
+
         if (isset($_POST['submit'])) {
-            $mail = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-            $password = $_POST['password'];
+            if ($user !== null) {
+                $editUser = new User();
+                $editUser->setUserName($_POST['username']);
+                $editUser->setEmail($_POST['email']);
 
-            if (!empty($mail) && !empty($password)) {
-                $userManager = new UserManager();
-                $user = $userManager->getUserByMail($mail);
-                var_dump($user);
-
-                            if ($user) {
-                                $hashedPasswordFromDatabase = $user['password'];
-                                if (password_verify($password, $hashedPasswordFromDatabase)) {
-                                    $successMessage = 'Connexion réussie !';
-                                    $data['successMessage'] = $successMessage;
-                                    $_SESSION['user'] = $user;
-                                    $_SESSION['user']['id'] = $user['id'];
-
-                                    header('Location: index.php?page=user&action=index');
-                                }
-
-                
+                if (!empty($_POST['new_password'])) {
+                    $editUser->setPassword(password_hash($_POST['new_password'], PASSWORD_DEFAULT));
                 } else {
-                    $errorMessage = 'Aucun utilisateur trouvé avec cette adresse e-mail.';
+                    $editUser->setPassword($user['password']);
                 }
-                // return $errorMessage;// !!!!!! ERREUR NON RETOURNÉE (undefined)
-            }
-        }
-        $this->render(__DIR__ . '/../views/template_login.phtml', $data);
-    }
 
+                // rôles existants
+                $existingRoles = $_SESSION['user']['roles'];
+                $editUser->setRoles($existingRoles);
 
-    public function register()
-    {
-        // On instancie la class User pour créer un nouvel utilisateur
-        $user = new User();
-        // On anticipe d'éventuelles erreurs en créant un tableau
-        $errors = [];
-        if (isset($_POST['submit'])) {
-            // Si le formulaire est validé on "hydrate" notre objet
-            // avec les informations du formulaire
-            $user->setUserName($_POST['username']);
-            $user->setEmail($_POST['email']);
-            $user->setPassword($_POST['password']);
-            // Si la méthode validate ne retourne pas d'erreurs on fait l'insert dans la table
-            $errors = $user->validate();
-            if (empty($errors)) {
-                // On transforme l'objet User courant en tableau
-                // Avec uniquement les valeurs des propriétés
-                // Voir la methode toArray() dans User.php
-                $userArray = $user->toArray();
-                // On instancie un UserManager
+                $editUserArray = $editUser->toArray();
+                $editUserArray[] = $id;
+
                 $userManager = new UserManager();
-                // On effectue l'insert dans la table
-                $insert = $userManager->createUser($userArray);
-                // ON redirige !
-                header('Location: index.php?page=user&action=login');
+                $userManager->update($editUserArray);
+                header("Location:?page=user&action=index");
+                exit;
             }
         }
-        $this->render(__DIR__ . '/../views/template_register.phtml', [
-            '$_POST' => $_POST,
-            'user' => $user,
-            'errors' => $errors
+
+        $this->render(__DIR__ . '/../views/template_profile_edit.phtml', [
+            "user" => $user
         ]);
     }
 }
