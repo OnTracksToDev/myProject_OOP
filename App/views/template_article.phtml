@@ -1,0 +1,64 @@
+<?php
+$articles = $data['article'];
+?>
+
+<style>
+    .list-group-item {
+        transition: transform 0.3s;
+        margin-bottom: 20px;
+        cursor: pointer;
+    }
+
+    .list-group-item:hover {
+        transform: scale(1.03);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-img-top {
+        object-fit: cover;
+        height: 100%;
+        width: 100%;
+
+    }
+
+    .card-body {
+        padding: 1.25rem;
+    }
+
+    .card-img-container {
+        height: 100%;
+        overflow: hidden;
+    }
+</style>
+
+<section class="container mt-md-3">
+    <h1 class="text-center mb-4">Retrouvez la liste complète des Articles</h1>
+
+    <div>
+        <ul class="list-group ">
+            <?php foreach ($articles as $article) : ?>
+                <li class="list-group-item p-0">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <div class="card-img-container">
+                                <img src="<?= $article['image_path'] ?>" class="img-fluid  card-img-top" alt="<?= $article['title'] ?>">
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body m-md-4 text-center">
+                                <h5 class="card-title"><?= $article['title'] ?></h5>
+                                <?php
+                                $words = explode(' ', $article['content']);
+                                $shortContent = implode(' ', array_slice($words, 0, 40));
+                                ?>
+                                <p class="card-text p-3"><?= $shortContent ?>...</p>
+                                <p class="card-text mb-md-2"><small class="text-body-secondary">Last updated: <?= $article['date_update'] ?></small></p>
+                                <a href="index.php?page=detail&action=index&id=<?= urlencode($article['id']) ?>" class="btn btn-secondary read-more-btn">Read more</a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            <?php endforeach ?>
+        </ul>
+    </div>
+</section>

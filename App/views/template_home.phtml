@@ -1,31 +1,27 @@
 <?php $title = "Travel's Dream"; ?>
-
-
 <?php $articles = $data['article'];
 $caroussel = $data['caroussel'];
-
-
-
 ?>
-<h1>HOME</h1>
-
-
-
-
 <style>
     .card-img-top {
         aspect-ratio: 16/9;
     }
 
     .card {
-        transition: transform 1s;
+        transition: transform 0.5s;
+        margin-bottom: 20px; /* Ajout d'une marge entre les cartes */
     }
 
     .card:hover {
-        transform: scale(1.02);
+        transform: scale(1.05); /* Ajustement du scaling au survol */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ajout d'une ombre légère au survol */
     }
 </style>
-<section class="">
+
+
+<section class="container">
+<h1 class="text-center mb-4">HOME</h1>
+
     <div id="homeCarousel" class="carousel slide" data-bs-touch="true">
         <div class="carousel-indicators">
             <?php foreach ($caroussel as $key => $article) : ?>
@@ -39,7 +35,6 @@ $caroussel = $data['caroussel'];
                     <img src="<?= $article['image_path'] ?>" class="d-block w-100" alt="<?= $article['title'] ?>">
                     <div class="carousel-caption d-none d-md-block">
                         <h5><?= $article['title'] ?></h5>
-                        <p><?= $article['content'] ?></p>
                     </div>
                 </div>
             <?php endforeach ?>
@@ -56,39 +51,30 @@ $caroussel = $data['caroussel'];
     </div>
 </section>
 
-<section id="articlesSection" class=" bg-secondary p-2 text-dark bg-opacity-25">
-    <div>
-        <h1 class="text-center mt-3">Discover all the articles!</h1>
-
-        <p>Explore the recent articles:</p>
+<section id="articlesSection" class="p-2 text-dark bg-opacity-25">
+    <div class="container">
+        <h1 class="text-center m-3 m-md-5">Explore the recent articles!</h1>
     </div>
 
-
-
-    <div class="row row-cols-1 row-cols-md-2 g-4">
-        <?php foreach ($articles as $article) : ?>
-            <div class="col">
-
-                <div class="card">
-                    <img src="<?= $article['image_path'] ?>" class="card-img-top" alt="<?= $article['title'] ?>">
-                    <div class="card-body">
-                        <h5 class="card-title"><?= $article['title'] ?></h5>
-                        <?php
-                        // Coupe en tableau de mots
-                        $words = explode(' ', $article['content']);
-                        // ex : 2 premiers mots en string
-                        $shortContent = implode(' ', array_slice($words, 0, 2));
-                        ?>
-                        <p class="card-text"><?= $shortContent ?>...</p>
-                        <p class="card-text"><small class="text-muted">Last updated <?= $article['date_publication'] ?></small></p>
-                        <a href="index.php?page=detail&action=index&id=<?= urlencode($article['id']) ?>" class="btn btn-secondary">Read me</a>
+    <div class="container">
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            <?php foreach ($articles as $article) : ?>
+                <div class="col">
+                    <div class="card">
+                        <img src="<?= $article['image_path'] ?>" class="card-img-top" alt="<?= $article['title'] ?>">
+                        <div class="card-body">
+                            <h5 class="card-title"><?= $article['title'] ?></h5>
+                            <?php
+                            $words = explode(' ', $article['content']);
+                            $shortContent = implode(' ', array_slice($words, 0, 20));
+                            ?>
+                            <p class="card-text"><?= $shortContent ?>...</p>
+                            <p class="card-text"><small class="text-muted">Last updated <?= $article['date_publication'] ?></small></p>
+                            <a href="index.php?page=detail&action=index&id=<?= urlencode($article['id']) ?>" class="btn btn-secondary">Read more</a>
+                        </div>
                     </div>
                 </div>
-
-            </div>
-
-        <?php endforeach  ?>
-
+            <?php endforeach  ?>
+        </div>
     </div>
-
 </section>

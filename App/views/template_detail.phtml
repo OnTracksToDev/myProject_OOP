@@ -10,19 +10,24 @@ $article = $data['article'];
     <div class="card-body">
       <h1 class="mb-3 text-center display-4">Title: <?= $article['title'] ?></h1>
       <img src="<?= $article['image_path'] ?>" alt="<?= $article['title'] ?>" class="img-fluid rounded mb-4">
-      <p class="lead"><?= $article['content'] ?></p>
-      <div class="row">
-        <div class="col-md-6">
+      <div class="card-body border rounded-2 p-4 mb-3">
+        <p class="lead"><?= $article['content'] ?></p>
+      </div>
+      <div class="row ">
+        <div class="col-md-6 p-md-4 text-center">
           <p class="fst-italic font-weight-light small">
-            Created At: <?= $article['date_publication'] ?> | Updated At: <?= $article['date_update'] ?>
+            Created At: <?= $article['date_publication'] ?>
           </p>
+          <p class="fst-italic font-weight-light small">
+            Updated At: <?= $article['date_update'] ?>
+          </p>
+
         </div>
-        <div class="col-md-6 d-flex">
-          <p class="fst-italic font-weight-light small">User ID: <?= $article['user_id'] ?></p>
-          <img src="<?= $article['profile_image_path'] ?>" alt="Profile Picture of <?= $article['username'] ?>" class="rounded-circle ms-2" style="width: 20px; height: 20px;">
-          <p class="fst-italic font-weight-light small">Username: <?= $article['username'] ?></p>
-
-
+        <div class="col-md-6 p-md-4 d-flex justify-content-center align-items-center">
+          <div class="d-flex ">
+            <p class="fst-italic font-weight-light small ms-2 d-flex justify-content-center align-items-center">Write by <?= $article['username'] ?></p>
+            <img src="<?= $article['profile_image_path'] ?>" alt="Profile Picture of <?= $article['username'] ?>" class="rounded-circle ms-2" style="width: 30px; height: 30px;">
+          </div>
         </div>
       </div>
     </div>
@@ -56,10 +61,17 @@ $article = $data['article'];
       for ($i = 0; $i < min($commentCount, $displayLimit); $i++) {
         $comment = $comments[$i];
       ?>
+
+
+
+
+
         <div class="d-flex flex-start">
           <div class="card-body border">
-            <img src="<?= $comment['profile_img'] ?>" alt="Profile Picture of <?= $comment['username'] ?>" class="rounded-circle me-2" style="width: 20px; height: 20px;">
-            <h6 class="fw-bold mb-1"><?= ($comment['username']) ?></h6>
+            <div class="d-flex ">
+              <img src="<?= $comment['profile_img'] ?>" alt="Profile Picture of <?= $comment['username'] ?>" class="rounded-circle me-2" style="width: 20px; height: 20px;">
+              <h6 class="fw-bold mb-1 d-flex justify-content-center align-items-center"><?= ($comment['username']) ?></h6>
+            </div>
             <div class="d-flex align-items-center mb-3">
               <p class="mb-0">
                 le <?= $comment['date_publication'] ?>
@@ -84,8 +96,11 @@ $article = $data['article'];
         ?>
           <div class="d-flex flex-start card-body border">
             <div>
-              <img src="<?= $comment['profile_img'] ?>" alt="Profile Picture of <?= $comment['username'] ?>" class="rounded-circle me-2" style="width: 20px; height: 20px;">
-              <h6 class="fw-bold mb-1"><?= ($comment['username']) ?></h6>
+
+              <div class="d-flex ">
+                <img src="<?= $comment['profile_img'] ?>" alt="Profile Picture of <?= $comment['username'] ?>" class="rounded-circle me-2" style="width: 20px; height: 20px;">
+                <h6 class="fw-bold mb-1 d-flex justify-content-center align-items-center"><?= ($comment['username']) ?></h6>
+              </div>
               <div class="d-flex align-items-center mb-3">
                 <p class="mb-0">
                   le <?= $comment['date_publication'] ?>

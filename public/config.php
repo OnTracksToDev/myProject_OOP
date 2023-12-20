@@ -7,7 +7,6 @@ const DB_PASS = "";
 
 const CONFIG_ROUTES = [
     "home" => "Home",
-    "article" => "article"
 ];
 session_start();
 
