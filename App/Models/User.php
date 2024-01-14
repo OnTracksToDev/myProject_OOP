@@ -37,12 +37,12 @@ class User  extends AbstractTable{
     }
 
     public function setRoles(string|array $roles) {
-        // Si $roles est une chaîne, convertissez-la en un tableau
+        // Si $roles est une chaîne, convertir en un tableau
         if (is_string($roles)) {
             $roles = explode(',', $roles);
         }
 
-        // Assurez-vous que $roles est toujours un tableau
+        // Assure que $roles est toujours un tableau
         $roles = is_array($roles) ? $roles : [];
 
         $this->roles = json_encode($roles);
